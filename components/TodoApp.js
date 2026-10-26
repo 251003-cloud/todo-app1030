@@ -5,24 +5,15 @@ import TodoFilter from './TodoFilter'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
 import { addTodo, clearDone, countDone, countRemaining, deleteTodo, editTodo, filterTodos, toggleTodo } from '@/lib/todos'
+import { loadTodos, saveTodos } from '@/lib/storage'
 
-const STORAGE_KEY = 'todos'
-
-function loadTodos() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    return saved ? JSON.parse(saved) : []
-  } catch {
-    return []
-  }
-}
 
 export default function TodoApp() {
   const [todos, setTodos] = useState(loadTodos)
   const [filter, setFilter] = useState('all')
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+    saveTodos(todos)
   }, [todos])
 
   function handleAdd(text) {
