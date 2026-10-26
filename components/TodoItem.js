@@ -38,9 +38,9 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
 
   return (
     <li>
-      <label style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
+      <label>
         <input type="checkbox" checked={todo.done} onChange={() => onToggle(todo.id)} />
-        <span onDoubleClick={startEdit}>{todo.text}</span>
+        <span onDoubleClick={startEdit} style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>{todo.text}</span>
       </label>
       <button onClick={() => onDelete(todo.id)} aria-label={`${todo.text}を削除`}>
         削除
