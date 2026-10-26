@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import TodoFilter from './TodoFilter'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
-import { addTodo, countRemaining, deleteTodo, toggleTodo } from '@/lib/todos'
+import { addTodo, clearDone, countDone, countRemaining, deleteTodo, filterTodos, toggleTodo } from '@/lib/todos'
 
 const STORAGE_KEY = 'todos'
 
@@ -37,20 +37,20 @@ export default function TodoApp() {
     setTodos(deleteTodo(todos, id))
   }
 
-  function clearDone() {
+  function handleClearDone() {
     if (!window.confirm('完了済みの TODO を削除しますか？')) return
-    setTodos(todos.filter((todo) => !todo.done))
+    setTodos(clearDone(todos))
   }
-function clearAll() {
-  if (!window.confirm('すべての TODO を削除しますか？')) return
-  setTodos([])
-}
 
-  const doneCount = todos.filter((todo) => todo.done).length
+  function clearAll() {
+    if (!window.confirm('すべての TODO を削除しますか？')) return
+    setTodos([])
+  }
+
+  const doneCount = countDone(todos)
   const remaining = countRemaining(todos)
 
-  const visibleTodos =
-    filter === 'active' ? todos.filter((todo) => !todo.done) : filter === 'done' ? todos.filter((todo) => todo.done) : todos
+  const visibleTodos = filterTodos(todos, filter)
 
   return (
     <div>
@@ -62,13 +62,12 @@ function clearAll() {
           全 {todos.length} 件 / 完了 {doneCount} 件 / 残り {remaining} 件
         </p>
       )}
-      <button onClick={clearDone} disabled={doneCount === 0}>
+      <button onClick={handleClearDone} disabled={doneCount === 0}>
         完了済みを削除
       </button>
       <button onClick={clearAll} disabled={todos.length === 0}>
-  すべて削除
-</button>
-
+        すべて削除
+      </button>
     </div>
   )
 }
