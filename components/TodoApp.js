@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import TodoFilter from './TodoFilter'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
-import { addTodo, clearDone, countDone, countRemaining, deleteTodo, filterTodos, toggleTodo } from '@/lib/todos'
+import { addTodo, clearDone, countDone, countRemaining, deleteTodo, editTodo, filterTodos, toggleTodo } from '@/lib/todos'
 
 const STORAGE_KEY = 'todos'
 
@@ -37,6 +37,10 @@ export default function TodoApp() {
     setTodos(deleteTodo(todos, id))
   }
 
+  function handleEdit(id, text) {
+    setTodos(editTodo(todos, id, text))
+  }
+
   function handleClearDone() {
     if (!window.confirm('完了済みの TODO を削除しますか？')) return
     setTodos(clearDone(todos))
@@ -56,7 +60,7 @@ export default function TodoApp() {
     <div>
       <TodoForm onAdd={handleAdd} />
       <TodoFilter value={filter} onChange={setFilter} />
-      <TodoList todos={visibleTodos} onToggle={handleToggle} onDelete={handleDelete} />
+      <TodoList todos={visibleTodos} onToggle={handleToggle} onDelete={handleDelete} onEdit={handleEdit} />
       {todos.length > 0 && (
         <p>
           全 {todos.length} 件 / 完了 {doneCount} 件 / 残り {remaining} 件
