@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import TodoFilter from './TodoFilter'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
-import { countRemaining } from '@/lib/todos'
+import { addTodo, countRemaining, deleteTodo, toggleTodo } from '@/lib/todos'
 
 const STORAGE_KEY = 'todos'
 
@@ -25,17 +25,16 @@ export default function TodoApp() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
   }, [todos])
 
-  function addTodo(text) {
-    const newTodo = { id: crypto.randomUUID(), text, done: false }
-    setTodos([...todos, newTodo])
+  function handleAdd(text) {
+    setTodos(addTodo(todos, text))
   }
 
-  function toggleTodo(id) {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo)))
+  function handleToggle(id) {
+    setTodos(toggleTodo(todos, id))
   }
 
-  function deleteTodo(id) {
-    setTodos(todos.filter((todo) => todo.id !== id))
+  function handleDelete(id) {
+    setTodos(deleteTodo(todos, id))
   }
 
   function clearDone() {
@@ -55,9 +54,9 @@ function clearAll() {
 
   return (
     <div>
-      <TodoForm onAdd={addTodo} />
+      <TodoForm onAdd={handleAdd} />
       <TodoFilter value={filter} onChange={setFilter} />
-      <TodoList todos={visibleTodos} onToggle={toggleTodo} onDelete={deleteTodo} />
+      <TodoList todos={visibleTodos} onToggle={handleToggle} onDelete={handleDelete} />
       {todos.length > 0 && (
         <p>
           全 {todos.length} 件 / 完了 {doneCount} 件 / 残り {remaining} 件
