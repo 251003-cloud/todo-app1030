@@ -12,6 +12,13 @@ const config = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   collectCoverageFrom: ['app/**/*.js', 'components/**/*.js', 'lib/**/*.js', '!**/*.test.js'],
+
+    coverageThreshold: {
+    global: {
+      lines: 70,
+    },
+  },
+
 }
 
 export default createJestConfig(config)
