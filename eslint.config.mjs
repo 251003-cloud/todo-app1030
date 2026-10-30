@@ -10,6 +10,7 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    'coverage/**',    //　この行を追加する。
   ]),
 ])
 
